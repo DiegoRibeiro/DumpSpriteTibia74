@@ -16,9 +16,10 @@ int main(int argc, char** argv) {
     TIBIA_SPRITE_HEADER tsh;
     unsigned int* offsets = NULL;
 	unsigned int spr_addr_offset;
-    PIXEL p;
+    D_PIXEL p;
     int i;
     char buffer[50];
+    int sprite_count = 0;
 
     // reading sprite header
     fread(&tsh, sizeof(TIBIA_SPRITE_HEADER), 1, fp);
@@ -43,8 +44,8 @@ int main(int argc, char** argv) {
 		printf("offset %x\n", offset);
 
         fseek(fp, offset, SEEK_SET);
-        PIXEL tpix;
-		fread(&tpix, sizeof(PIXEL), 1, fp);
+        D_PIXEL tpix;
+		fread(&tpix, sizeof(D_PIXEL), 1, fp);
         printf("Found transparent pixel with value: (%u, %u, %u)\n", tpix.r, tpix.g, tpix.b);
 		unsigned short bytes_to_proccess;
 		fread(&bytes_to_proccess, sizeof(unsigned short), 1, fp);
@@ -81,7 +82,7 @@ int main(int argc, char** argv) {
                     d_write_pixel(fpi, tpix);
                 }
 
-                PIXEL aux;
+                D_PIXEL aux;
                 for(int j = 0; j < c_cpix; j++) {
                     fread(&aux.r, sizeof(unsigned char), 1, fp);
 					fread(&aux.g, sizeof(unsigned char), 1, fp);
