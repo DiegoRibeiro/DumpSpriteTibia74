@@ -20,7 +20,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 include_directories ("${PROJECT_SOURCE_DIR}/d_bitmap/src")
 add_subdirectory (d_bitmap)
 
-add_executable(dump74 "${PROJECT_SOURCE_DIR}/src/main.c")
+add_executable(dump74 "${PROJECT_SOURCE_DIR}/src/main.c" "${PROJECT_SOURCE_DIR}/src/sprite_dumper.c")
 target_link_libraries (dump74 d_bitmap)
 
 # add the install targets
