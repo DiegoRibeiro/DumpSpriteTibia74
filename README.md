@@ -8,6 +8,7 @@ Require mingw32-make, gcc, g++:
 
 `mingw32-make all`
 
+Optional:
 `mingw32-make install`
 
 # Sprite structure
