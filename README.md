@@ -1,3 +1,17 @@
+# How to compile:
+
+- Require mingw32-make, gcc, g++:
+
+`mkdir build && cd build`
+
+`cmake -G "MinGW Makefiles" ../`
+
+`mingw32-make all`
+
+`mingw32-make install`
+
+# Sprite structure
+
 Little endian storage
 
 The sprite is always 32x32 = 1024 need to keep that in mind to populate the image.
