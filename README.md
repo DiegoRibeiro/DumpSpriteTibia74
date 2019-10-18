@@ -1,6 +1,6 @@
 # How to compile:
 
-- Require mingw32-make, gcc, g++:
+Require mingw32-make, gcc, g++:
 
 `mkdir build && cd build`
 
