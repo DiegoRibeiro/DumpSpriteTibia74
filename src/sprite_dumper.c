@@ -57,6 +57,11 @@ int read_sprite(FILE* fp, BINARY_SPRITE_DATA* bin, SPRITE_SHEET_DATA* data) {
 
     printf("transparent pixel: (%x, %x, %x)\n", data->tpix.r, data->tpix.g, data->tpix.b);
 
+    // choosing tranparent color
+    data->tpix.r = 248;
+    data->tpix.g = 248;
+    data->tpix.b = 240;
+
     unsigned short bytes_to_proccess;
 	fread(&bytes_to_proccess, sizeof(unsigned short), 1, fp);
 	printf("processing %u bytes ...\n", bytes_to_proccess);
