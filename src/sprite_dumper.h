@@ -3,6 +3,7 @@
 
     #include <stdio.h>
     #include "d_bitmap.h"
+    #include "d_bitmap_v4.h"
 
     #pragma pack(1)
     struct tibiaspr {
@@ -33,6 +34,6 @@
     void read_header(FILE* fp, TIBIA_SPRITE_HEADER* tsh);
     int read_sprite(FILE* fp, BINARY_SPRITE_DATA* bin, SPRITE_SHEET_DATA* data);
     void write_full_sprite(FILE* fp, D_PIXEL* buffer);
-    void write_sprite(FILE* fp, D_PIXEL* buffer, int start, int end);
-    void expand_sprite(D_PIXEL* buffer, BINARY_SPRITE_DATA* bin, SPRITE_SHEET_DATA* data);
+    void write_sprite(FILE* fp, D_PIXEL_A* buffer, int start, int end);
+    void expand_sprite(D_PIXEL_A* buffer, BINARY_SPRITE_DATA* bin, SPRITE_SHEET_DATA* data);
 #endif

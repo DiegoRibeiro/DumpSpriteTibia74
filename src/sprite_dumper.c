@@ -1,5 +1,6 @@
 #include "sprite_dumper.h"
 #include <string.h>
+#include <stdint.h>
 
 void open_sprite(FILE** fp, char* name) {
     unsigned char buffer[50];
@@ -26,13 +27,13 @@ void create_spritesheet(FILE** fp, SPRITE_SHEET_DATA* data, int w, int h, int si
     data->w = w;
     data->h = h;
 
-    int sizeHeader = 54 + ( (data->w * size * 3) + (data->h * size * 3) );
+    int sizeHeader = HEADER_V4_SIZE + ( (data->w * size * PIXEL_V4_SIZE) + (data->h * size * PIXEL_V4_SIZE) );
     int width = data->w * size;
     int height = -data->h * size;
-    int rawSizeHeader = (data->w * size * 3) + (data->h * size * 3);
+    int rawSizeHeader = (data->w * size * PIXEL_V4_SIZE) + (data->h * size * PIXEL_V4_SIZE);
 
-    d_write_bmp_header(*fp, sizeHeader);
-    d_write_dib_header(*fp, width, height, rawSizeHeader);
+    d_write_bmp_header_v4(*fp, sizeHeader);
+    d_write_dib_header_v4(*fp, width, height, rawSizeHeader);
 }
 
 int read_sprite(FILE* fp, BINARY_SPRITE_DATA* bin, SPRITE_SHEET_DATA* data) {
@@ -42,7 +43,7 @@ int read_sprite(FILE* fp, BINARY_SPRITE_DATA* bin, SPRITE_SHEET_DATA* data) {
     fseek(fp, addr_offset, SEEK_SET);
     fread(&offset, sizeof(unsigned int), 1, fp);
 
-    printf("offset: %x\n", offset);
+    //printf("offset: %x\n", offset);
 
     if (offset == 0) { // reserved, its empty and dont point to anything
         memset(bin->buffer, 0, 10000);
@@ -51,25 +52,23 @@ int read_sprite(FILE* fp, BINARY_SPRITE_DATA* bin, SPRITE_SHEET_DATA* data) {
 
     fseek(fp, offset, SEEK_SET);
 
-    printf("sizeof (D_PIXEL): %u\n", sizeof(D_PIXEL));
-
 	fread(&data->tpix, sizeof(D_PIXEL), 1, fp);
 
-    printf("transparent pixel: (%x, %x, %x)\n", data->tpix.r, data->tpix.g, data->tpix.b);
+    //printf("transparent pixel: (%x, %x, %x)\n", data->tpix.r, data->tpix.g, data->tpix.b);
 
     // choosing tranparent color
-    data->tpix.r = 248;
-    data->tpix.g = 248;
-    data->tpix.b = 240;
+    //data->tpix.r = 248;
+    //data->tpix.g = 248;
+    //data->tpix.b = 240;
 
-    unsigned short bytes_to_proccess;
-	fread(&bytes_to_proccess, sizeof(unsigned short), 1, fp);
-	printf("processing %u bytes ...\n", bytes_to_proccess);
+    uint16_t bytes_to_proccess;
+	fread(&bytes_to_proccess, sizeof(uint16_t), 1, fp);
+	//printf("processing %u bytes ...\n", bytes_to_proccess);
 
-    int read = fread(bin->buffer, sizeof(unsigned char), bytes_to_proccess, fp);
+    int read = fread(bin->buffer, sizeof(uint8_t), bytes_to_proccess, fp);
     bin->read = read;
 
-    printf("readed %u\n", read);
+    //printf("readed %u\n", read);
 
     if(read != bytes_to_proccess)
         return 0;
@@ -82,37 +81,41 @@ void write_full_sprite(FILE* fp, D_PIXEL* buffer) {
     }
 }
 
-void write_sprite(FILE* fp, D_PIXEL* buffer, int start, int end) {
+void write_sprite(FILE* fp, D_PIXEL_A* buffer, int start, int end) {
     for(int i = start; i < end; i++) {
-        d_write_pixel(fp, buffer[i]);
+        d_write_pixel_v4(fp, buffer[i]);
     }
 }
 
-void expand_sprite(D_PIXEL* buffer, BINARY_SPRITE_DATA* bin, SPRITE_SHEET_DATA* data) {
+void expand_sprite(D_PIXEL_A* buffer, BINARY_SPRITE_DATA* bin, SPRITE_SHEET_DATA* data) {
     int i = 0; // tracker binary file
-    unsigned short count_t; // count transparent pixel
-    unsigned short count_c; // count colored pixel
+    uint16_t count_t; // count transparent pixel
+    uint16_t count_c; // count colored pixel
     D_PIXEL cpix;
     int index = 0; // tracker bitmap file in pixels
 
     while(bin->read > i) {
-        count_t = (unsigned short)(bin->buffer[i + 1] << 8 | bin->buffer[i]);
-        count_c = (unsigned short)(bin->buffer[i + 3] << 8 | bin->buffer[i + 2]);
+        count_t = (uint16_t)(bin->buffer[i + 1] << 8 | bin->buffer[i]);
+        count_c = (uint16_t)(bin->buffer[i + 3] << 8 | bin->buffer[i + 2]);
 
         i += 4; // skip 4 bytes
         
         // write transparent pixel
         for(int j = 0; j < count_t; j++) {
-            buffer[index] = data->tpix;
+            buffer[index].r = data->tpix.r;
+            buffer[index].g = data->tpix.g;
+            buffer[index].b = data->tpix.b;
+            buffer[index].a = 0x00;
             index++;
         }
 
         // write colored pixel
         for(int j = 0; j < count_c; j++) {
-            cpix.r = bin->buffer[i];
-            cpix.g = bin->buffer[i + 1];
-            cpix.b = bin->buffer[i + 2];
-            buffer[index] = cpix;
+            buffer[index].r = bin->buffer[i];
+            buffer[index].g = bin->buffer[i + 1];
+            buffer[index].b = bin->buffer[i + 2];
+            buffer[index].a = 0xFF;
+
             index++;
             i += 3;            
         }
@@ -120,7 +123,10 @@ void expand_sprite(D_PIXEL* buffer, BINARY_SPRITE_DATA* bin, SPRITE_SHEET_DATA* 
 
     // fill with the left over of image with transparent pixel
     while(index < 1024) {
-        buffer[index] = data->tpix;
+        buffer[index].r = data->tpix.r;
+        buffer[index].g = data->tpix.g;
+        buffer[index].b = data->tpix.b;
+        buffer[index].a = 0x00;
         index++;
     }
 }

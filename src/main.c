@@ -14,14 +14,14 @@ int main(int argc, char** argv) {
     int read;
     BINARY_SPRITE_DATA bin;
     SPRITE_SHEET_DATA data;
-    D_PIXEL** spr_row;
+    D_PIXEL_A** spr_row;
     FILE* fp;
     FILE* fps;
 
     // allocate temporary list of buffer row
-    spr_row = (D_PIXEL**)malloc(sizeof(D_PIXEL*) * COL);
+    spr_row = (D_PIXEL_A**)malloc(sizeof(D_PIXEL_A*) * COL);
     for(int i = 0; i < COL; i++) {
-        spr_row[i] = (D_PIXEL*)malloc(sizeof(D_PIXEL) * 1024);
+        spr_row[i] = (D_PIXEL_A*)malloc(sizeof(D_PIXEL_A) * 1024);
     }
 
     open_sprite(&fp, "Tibia");
