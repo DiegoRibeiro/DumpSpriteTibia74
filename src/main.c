@@ -74,6 +74,16 @@ int main(int argc, char** argv) {
         sprites_left -= COL;
     }
 
+    // create row with empty sprites
+    D_PIXEL_A empty;
+    empty.r = data.tpix.r;
+    empty.g = data.tpix.g;
+    empty.b = data.tpix.b;
+    empty.a = 0;
+    for(int i = 0; i < 1024; i++) {
+        spr_row[0][i] = empty;
+    }
+
     // write the last sprites that did not match COL * ROW
     for(int i = 0; i < (COL*ROW) - sprites_wrote; i++) {
         write_sprite(fps, spr_row[0], 0, 1024);
