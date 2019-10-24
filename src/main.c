@@ -5,7 +5,7 @@
 #include "sprite_dumper.h"
 
 #define COL 90
-#define ROW 90
+#define ROW 2
 
 int main(int argc, char** argv) {
     printf("STARTING APP ... \n");
