@@ -2,8 +2,8 @@ cmake_minimum_required (VERSION 2.6)
 project (d_sprite_dump_74)
 
 # version number
-set (D_SPRITE_DUMP_74_VERSION_MAJOR 0)
-set (D_SPRITE_DUMP_74_VERSION_MINOR 1)
+set (D_SPRITE_DUMP_74_VERSION_MAJOR 1)
+set (D_SPRITE_DUMP_74_VERSION_MINOR 0)
 
 # configure a header file to pass some of the CMake settings
 # to the source code
