@@ -23,3 +23,7 @@ Optional:
 
 Optional:
 `make install`
+
+## Notes
+
+So far i have tested only on tibia.spr from 7.4/7.7 version. 
