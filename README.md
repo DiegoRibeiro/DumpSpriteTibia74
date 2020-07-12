@@ -1,6 +1,6 @@
 # How to compile:
 
-## get the submodule
+## Get the submodule
 git submodule update --recursive
 
 ## Windows:
