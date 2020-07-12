@@ -1,5 +1,8 @@
 # How to compile:
 
+## get the submodule
+git submodule update --recursive
+
 ## Windows:
 
 Require mingw32-make, gcc, g++:
