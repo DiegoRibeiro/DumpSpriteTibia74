@@ -1,7 +1,8 @@
 # How to compile:
 
 ## Get the submodule
-git submodule update --recursive
+git submodule init
+git submodule update
 
 ## Windows:
 
