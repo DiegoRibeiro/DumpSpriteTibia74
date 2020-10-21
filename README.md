@@ -2,6 +2,7 @@
 
 ## Get the submodule
 git submodule init
+
 git submodule update
 
 ## Windows:
